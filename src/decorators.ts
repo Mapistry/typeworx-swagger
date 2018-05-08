@@ -1,4 +1,4 @@
-import { DecoratorReturnFunction, DecoratorType, State as StateBase, TypeWorxDecorator, Utilities as utils } from '@mapistry/typeworx';
+import { DecoratorType, State as StateBase, TypeWorxDecorator, Utilities as utils } from '@mapistry/typeworx';
 import * as ts from 'ts-simple-ast';
 import { TypeScriptJsonSchemaBuilder } from './typeScriptJsonSchemaBuilder';
 
@@ -276,7 +276,7 @@ function afterTags(state: State, node: ts.MethodDeclaration | ts.ClassDeclaratio
 
 export class Decorators {
     @TypeWorxDecorator({ namespace: 'swagger', beforeAll: setupState, afterAll, decoratorType: DecoratorType.Class, order: -1 })
-    public static Route(value?: string): DecoratorReturnFunction {
+    public static Route(value?: string): any {
         return (state: State, node: ts.ClassDeclaration, routeDecorator: ts.Decorator) => {
             if (node.getKindName() !== 'ClassDeclaration') {
                 throw new Error('Only valid on class.');
@@ -291,37 +291,37 @@ export class Decorators {
     }
 
     @TypeWorxDecorator({ namespace: 'swagger', decoratorType: DecoratorType.Method, order: -1 })
-    public static Get(value?: string): DecoratorReturnFunction {
+    public static Get(value?: string): any {
         return verbWrapper();
     }
 
     @TypeWorxDecorator({ namespace: 'swagger', decoratorType: DecoratorType.Method, order: -1 })
-    public static Post(value?: string): DecoratorReturnFunction {
+    public static Post(value?: string): any {
         return verbWrapper();
     }
 
     @TypeWorxDecorator({ namespace: 'swagger', decoratorType: DecoratorType.Method, order: -1 })
-    public static Put(value?: string): DecoratorReturnFunction {
+    public static Put(value?: string): any {
         return verbWrapper();
     }
 
     @TypeWorxDecorator({ namespace: 'swagger', decoratorType: DecoratorType.Method, order: -1 })
-    public static Patch(value?: string): DecoratorReturnFunction {
+    public static Patch(value?: string): any {
         return verbWrapper();
     }
 
     @TypeWorxDecorator({ namespace: 'swagger', decoratorType: DecoratorType.Method, order: -1 })
-    public static Delete(value?: string): DecoratorReturnFunction {
+    public static Delete(value?: string): any {
         return verbWrapper();
     }
 
     @TypeWorxDecorator({ namespace: 'swagger', decoratorType: DecoratorType.Method, order: -1 })
-    public static CustomHttp(verb: string, value?: string): DecoratorReturnFunction {
+    public static CustomHttp(verb: string, value?: string): any {
         return verbWrapper();
     }
 
     @TypeWorxDecorator({ namespace: 'swagger', decoratorType: DecoratorType.Method })
-    public static Response<T = any>(statusCode: number, description?: string, responseType?: ResponseType, example?: T): DecoratorReturnFunction {
+    public static Response<T = any>(statusCode: number, description?: string, responseType?: ResponseType, example?: T): any {
         return (state: State, node: ts.MethodDeclaration, routeDecorator: ts.Decorator) => {
             const verbObject = state.lastVerbObject;
             if (!verbObject) {
@@ -334,7 +334,7 @@ export class Decorators {
 
     // tslint:disable-next-line:no-bitwise
     @TypeWorxDecorator({ namespace: 'swagger', decoratorType: DecoratorType.Method | DecoratorType.Class, after: afterTags })
-    public static Tags(...value: string[]): DecoratorReturnFunction {
+    public static Tags(...value: string[]): any {
         return (state: State, node: ts.MethodDeclaration | ts.ClassDeclaration, routeDecorator: ts.Decorator) => {
             const flags = node.getCombinedModifierFlags();
             const parameters = utils.getLiteralDecoratorParameters(routeDecorator) as string[];
@@ -351,7 +351,7 @@ export class Decorators {
     }
 
     @TypeWorxDecorator({ namespace: 'swagger', decoratorType: DecoratorType.Method, after: afterTags })
-    public static Security(securityName: string, scopes?: string[], destinationProperty?: string): DecoratorReturnFunction {
+    public static Security(securityName: string, scopes?: string[], destinationProperty?: string): any {
         return (state: State, node: ts.MethodDeclaration | ts.ClassDeclaration, routeDecorator: ts.Decorator) => {
             const parameters = utils.getLiteralDecoratorParameters(routeDecorator);
             const resolvedSecurityName = parameters[0];
@@ -372,19 +372,19 @@ export class Decorators {
     }
 
     @TypeWorxDecorator({ namespace: 'swagger', decoratorType: DecoratorType.Parameter, options: { isSwaggerParameterDecorator: true } })
-    public static Body(): DecoratorReturnFunction {
+    public static Body(): any {
         return parameterWrapper();
     }
     @TypeWorxDecorator({ namespace: 'swagger', decoratorType: DecoratorType.Parameter, options: { isSwaggerParameterDecorator: true } })
-    public static Path(name?: string): DecoratorReturnFunction {
+    public static Path(name?: string): any {
         return parameterWrapper();
     }
     @TypeWorxDecorator({ namespace: 'swagger', decoratorType: DecoratorType.Parameter, options: { isSwaggerParameterDecorator: true } })
-    public static Query(name?: string): DecoratorReturnFunction {
+    public static Query(name?: string): any {
         return parameterWrapper();
     }
     @TypeWorxDecorator({ namespace: 'swagger', decoratorType: DecoratorType.Parameter, options: { isSwaggerParameterDecorator: true } })
-    public static Header(name?: string): DecoratorReturnFunction {
+    public static Header(name?: string): any {
         return parameterWrapper();
     }
 }
