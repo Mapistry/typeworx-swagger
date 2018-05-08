@@ -1,4 +1,5 @@
 import { DecoratorType, State as StateBase, TypeWorxDecorator, Utilities as utils } from '@mapistry/typeworx';
+import * as fs from 'fs';
 import * as ts from 'ts-simple-ast';
 import { TypeScriptJsonSchemaBuilder } from './typeScriptJsonSchemaBuilder';
 
@@ -50,7 +51,7 @@ function setupState(state: State) {
     };
     state.swagger = swaggerDoc;
     if (state.baseSwaggerPath) {
-        const newSwagger = require(state.baseSwaggerPath);
+        const newSwagger = JSON.parse(fs.readFileSync(state.baseSwaggerPath, 'utf-8'));
         state.swagger = Object.assign({}, swaggerDoc, newSwagger);
     }
     state.builder = new TypeScriptJsonSchemaBuilder({ ignoreCustomJsDocTags: state.ignoreCustomJsDocTags });
