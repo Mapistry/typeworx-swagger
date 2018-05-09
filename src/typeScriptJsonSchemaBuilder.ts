@@ -162,9 +162,6 @@ export class TypeScriptJsonSchemaBuilder {
         return { name, schema };
     }
 
-    public getJsonForProperty() {
-    }
-
     public getJsonType(type: ts.Type): any {
         const flags = type.getFlags();
         if (type.isStringType() || type.isStringLiteralType()) {
@@ -215,18 +212,20 @@ export class TypeScriptJsonSchemaBuilder {
         if (declarations) {
             for (const declaration of declarations) {
                 const propertyDeclaration = declaration as ts.PropertyDeclaration;
-                const docs = propertyDeclaration.getJsDocs();
-                if (docs) {
-                    for (const doc of docs) {
-                        const tags = doc.getTags();
-                        if (tags) {
-                            for (const tag of tags) {
-                                const nameNode = tag.getTagNameNode();
-                                if (nameNode && nameNode.getText()) {
-                                    let finalResult: any = tag.getComment();
-                                    const parseResult = parseFloat(finalResult);
-                                    finalResult = isNaN(parseResult) ? finalResult : parseResult;
-                                    result[nameNode.getText()] = finalResult;
+                if (propertyDeclaration.getJsDocs) {
+                    const docs = propertyDeclaration.getJsDocs();
+                    if (docs) {
+                        for (const doc of docs) {
+                            const tags = doc.getTags();
+                            if (tags) {
+                                for (const tag of tags) {
+                                    const nameNode = tag.getTagNameNode();
+                                    if (nameNode && nameNode.getText()) {
+                                        let finalResult: any = tag.getComment();
+                                        const parseResult = parseFloat(finalResult);
+                                        finalResult = isNaN(parseResult) ? finalResult : parseResult;
+                                        result[nameNode.getText()] = finalResult;
+                                    }
                                 }
                             }
                         }

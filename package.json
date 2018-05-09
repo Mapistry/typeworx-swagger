@@ -1,6 +1,6 @@
 {
   "name": "@mapistry/typeworx-swagger",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A typeworx plugin library for generating a swagger spec.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
