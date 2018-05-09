@@ -18,7 +18,7 @@
     "typescript": "^2.8.3"
   },
   "dependencies": {
-    "@mapistry/typeworx": "^1.0.0",
+    "@mapistry/typeworx": "^1.0.1",
     "debug": "^3.1.0"
   },
   "peerDependencies": {
