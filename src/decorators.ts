@@ -369,6 +369,9 @@ export class Decorators {
             security.push({
                 [resolvedSecurityName]: resolvedScopes,
             });
+            if (resolvedDestinationProperty.toLowerCase() !== 'security') {
+                (verbObject.security = verbObject.security || []).push({ [resolvedSecurityName]: [] });
+            }
         };
     }
 
