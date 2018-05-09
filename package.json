@@ -1,6 +1,6 @@
 {
   "name": "@mapistry/typeworx-swagger",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A typeworx plugin library for generating a swagger spec.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,13 +12,21 @@
   },
   "author": "Azad Ratzki",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mapistry/typeworx-swagger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Mapistry/typeworx-swagger/issues"
+  },
+  "homepage": "https://github.com/Mapistry/typeworx-swagger#readme",
   "devDependencies": {
     "@types/debug": "0.0.30",
     "@types/node": "^9.3.0",
     "typescript": "^2.8.3"
   },
   "dependencies": {
-    "@mapistry/typeworx": "^1.0.1",
+    "@mapistry/typeworx": "^1.0.2",
     "debug": "^3.1.0"
   },
   "peerDependencies": {
