@@ -1,6 +1,6 @@
 {
   "name": "@mapistry/typeworx-swagger",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "A typeworx plugin library for generating a swagger spec.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,10 +26,10 @@
     "typescript": "^2.8.3"
   },
   "dependencies": {
-    "@mapistry/typeworx": "^1.0.2",
+    "@mapistry/typeworx": "^1.0.4",
     "debug": "^3.1.0"
   },
   "peerDependencies": {
-    "ts-simple-ast": "^11.1.0"
+    "ts-simple-ast": "^11.3.0"
   }
 }

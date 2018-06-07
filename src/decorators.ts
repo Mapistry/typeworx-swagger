@@ -1,7 +1,8 @@
-import { DecoratorType, State as StateBase, TypeWorxDecorator, Utilities as utils } from '@mapistry/typeworx';
+import { BuilderOptions, DecoratorType, State as StateBase, TypeScriptJsonSchemaBuilder, TypeWorxDecorator, Utilities as utils } from '@mapistry/typeworx';
+import * as debug from 'debug';
 import * as fs from 'fs';
 import * as ts from 'ts-simple-ast';
-import { TypeScriptJsonSchemaBuilder } from './typeScriptJsonSchemaBuilder';
+const log = debug('typeworx-swagger');
 
 export function isMethodPublic(node: ts.MethodDeclaration) {
     // tslint:disable-next-line:no-bitwise
@@ -127,8 +128,31 @@ function getParameterFromDecorator(state: State, parameter: ts.ParameterDeclarat
     const decoratorName = decorator.getName();
     const name = decoratorName === 'Body' ? 'body' : values[0] || parameter.getName();
     const inLocation = decoratorName.toLowerCase();
+    let description = null;
+    const parent = parameter.getAncestors().find((a) => a.getKind() === ts.SyntaxKind.MethodDeclaration) as ts.MethodDeclaration;
+    if (parent) {
+        const docs = parent.getJsDocs();
+        for (const doc of docs) {
+            const tags = doc.getTags();
+            for (const tag of tags) {
+                const tagNameNode = tag.getTagNameNode();
+                if (tagNameNode) {
+                    if (tagNameNode.getText() === 'param') {
+                        const children = tag.getChildren();
+                        if (children[1] && children[1].getText() === parameter.getName()) {
+                            description = tag.getComment() || '';
+                            break;
+                        }
+                    }
+                }
+            }
+            if (description !== null) {
+                break;
+            }
+        }
+    }
     const type = parameter.getType();
-    return getParameterFromValues(state, inLocation, name, type, '', !parameter.isOptional());
+    return getParameterFromValues(state, inLocation, name, type, description || '', !parameter.isOptional());
 }
 
 function getParameterFromValues(state: State, inLocation: string, name: string, returnType?: ts.Type, description?: string, required?: boolean) {
@@ -137,6 +161,7 @@ function getParameterFromValues(state: State, inLocation: string, name: string, 
     }
     const builder = state.builder;
     const schema = builder.getJsonType(returnType);
+    const isAny = schema && Object.keys(schema).length === 0;
     const result: any = {
         in: inLocation,
         name,
@@ -144,10 +169,13 @@ function getParameterFromValues(state: State, inLocation: string, name: string, 
         description: description || 'No description.',
     };
     if (['header', 'path', 'query'].indexOf(inLocation) > -1) {
-        if (!schema.type || ['string', 'boolean', 'number'].indexOf(schema.type) < 0) {
-            throw new Error('Parameter/Query/Header decorators must be associated with parameters that have a primitive type.');
+        log(`Processing Path: Pending Result ${JSON.stringify(result)}, Schema ${JSON.stringify(schema || 'none')}`);
+        if (!isAny) {
+            if (!schema || !schema.type || ['string', 'boolean', 'number'].indexOf(schema.type) < 0) {
+                throw new Error('Parameter/Query/Header decorators must be associated with parameters that have a primitive type.');
+            }
         }
-        result.type = schema.type;
+        result.type = isAny ? {} : schema.type;
     } else {
         result.schema = schema;
     }
