@@ -113,9 +113,11 @@ function getResponseFromValues(builder: TypeScriptJsonSchemaBuilder, statusCode:
     const result: any = {
         [statusCode]: {
             description: description || 'No description.',
-            schema: schema || {},
         },
     };
+    if (schema) {
+        result[statusCode].schema = schema;
+    }
     if (example) {
         result[statusCode].examples = { 'application/json': example };
     }
