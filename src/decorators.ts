@@ -47,7 +47,6 @@ function setupState(state: State) {
             description: 'Default API description.',
         },
         swagger: '2.0',
-        host: 'localhost:8080',
         paths: {},
     };
     state.swagger = swaggerDoc;
